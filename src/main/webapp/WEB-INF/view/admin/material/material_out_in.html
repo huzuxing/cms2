@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<!--
+BeyondAdmin - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.2.0
+Version: 1.0.0
+Purchase: http://wrapbootstrap.com
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Head -->
+<head>
+    <meta charset="utf-8" />
+    <title>后台管理系统-物资管理</title>
+    <meta name="description" content="data tables" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--Basic Styles-->
+    <link href="${base}/css/bootstrap.min.css" rel="stylesheet" />
+    <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
+    <link href="${base}/css/font-awesome.min.css" rel="stylesheet" />
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="${base}/css/beyond.min.css" rel="stylesheet" />
+    <link href="${base}/css/demo.min.css" rel="stylesheet" />
+    <link href="${base}/css/animate.min.css" rel="stylesheet" />
+    <link id="skin-link" href="" rel="stylesheet" type="text/css" />
+
+    <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
+    <style type="text/css">
+        .page-container {
+            display: block;
+            /* margin-left: 224px; */
+            margin-right: 0;
+            margin-top: 0;
+            min-height: 100%;
+            padding: 0;
+        }
+        input[type=checkbox] {
+            opacity: 1;
+            position: relative;
+            left: 0px;
+            z-index: 12;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<!-- /Head -->
+<!-- Body -->
+<body>
+    <!-- Main Container -->
+    <div class="main-container container-fluid">
+        <!-- Page Container -->
+        <div class="page-container">
+                <!-- Page Body -->
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6 col-xs-12">
+                            <div class="widget">
+                                <div class="widget-header bordered-bottom bordered-palegreen">
+                                    <span class="widget-caption">物资${(cate == 1) ? string('入库', '出库')}</span>
+                                </div>
+                                <div class="widget-body">
+                                    <div>
+                                        <form class="form-horizontal form-bordered" role="form" method="post" action="manage" id="jvForm">
+                                            <input type="hidden" name="cate" value="${cate}">
+                                            <div class="form-group">
+                                                <label for="materialId" class="col-sm-2 control-label no-padding-right">物资名称</label>
+                                                <div class="col-sm-10">
+                                                    <select name="materialId" id="materialId">
+                                                        <#list materialList as bean>
+                                                            <option value="${bean.id}" data-rest1="${bean.room1Rest}"  data-rest2="${bean.room2Rest}"  data-rest3="${bean.systemRest}">${bean.name}</option>
+                                                        </#list>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="location" class="col-sm-2 control-label no-padding-right">${(cate == 1) ? string('入库', '出库')}位置</label>
+                                                <div class="col-sm-10">
+                                                    <select name="location" id="location">
+                                                        <option value="1">二副库房</option>
+                                                        <option value="2">退库库房</option>
+                                                        <option value="3">系统库房</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="count" class="col-sm-2 control-label no-padding-right">${(cate == 1) ? string('入库', '出库')}数量</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" name="count" id="count" placeholder="" value="">
+                                                </div>
+                                                <#if cate == 2>
+                                                    <div class="col-sm-4">
+                                                        <span style="color: red;" id="notice" data-count="0">物件剩余：0</span>
+                                                    </div>
+                                                </#if>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="time" class="col-sm-2 control-label no-padding-right">${(cate == 1) ? string('入库', '出库')}日期</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" onfocus="WdatePicker({dateFmt : 'yyyy-MM-dd HH:mm', readOnly : true})" name="time" id="time" placeholder="" value="">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="operator" class="col-sm-2 control-label no-padding-right">经办人</label>
+                                                <div class="col-sm-10">
+                                                    <select name="operator" id="operator">
+                                                        <#list staff as bean>
+                                                            <option value="${bean.name}">${bean.name}</option>
+                                                        </#list>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="auditor" class="col-sm-2 control-label no-padding-right">审核人</label>
+                                                <div class="col-sm-10">
+                                                    <select name="auditor" id="auditor">
+                                                        <#list staff as bean>
+                                                            <option value="${bean.name}">${bean.name}</option>
+                                                        </#list>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-2 col-sm-10">
+                                                    <button type="button" class="btn btn-palegreen save">保存</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+        </div>
+        <!-- /Page Container -->
+        <!-- Main Container -->
+    </div>
+</body>
+<!--  /Body -->
+<script type="application/javascript" src="${base}/js/jquery-2.0.3.min.js"></script>
+<script type="application/javascript" src="${base}/js/jquery-form.js"></script>
+<script type="application/javascript" src="${base}/js/layer.js"></script>
+<script type="application/javascript" src="${base}/js/My97DatePicker/WdatePicker.js"></script>
+<script type="application/javascript">
+    $(function () {
+        var cate = `${cate}`;
+        $(".save").click(function () {
+            if ("" == $("input[name=count]").val()) {
+                layer.alert("请填写" + (cate == 1 ? "入库" : "出库") + "数量");
+                return;
+            }
+            if ("" == $("input[name=time]").val()) {
+                layer.alert("请填写" + (cate == 1 ? "入库" : "出库") + "日期");
+                return;
+            }
+            if (0 == $("#notice").data("count")) {
+                layer.alert("物件数量不足");
+                return;
+            }
+            $("#jvForm").ajaxSubmit({
+                success : function (result) {
+                    if (200 == result.status)
+                            layer.alert("操作成功!");
+                    else if (0 == result.status)
+                            layer.alert((cate == 1 ? "入库" : "出库") + "数量大于库存数量!");
+                    else
+                            layer.alert("操作失败!");
+                }
+            });
+        });
+        var location = $("#location").find("option:selected").val();
+        var count = 0;
+        var count = $("#materialId").find("option:selected").data("");
+        if (1 == location) {
+            count = $("#materialId").find("option:selected").data("rest1");
+
+        }
+        else if (2 == location) {
+            count = $("#materialId").find("option:selected").data("rest2");
+        }
+        else
+            count = $("#materialId").find("option:selected").data("rest3");
+        $("#notice").data("count", count);
+        $("#notice").text("物件剩余：" + count);
+        $("#materialId").change(function () {
+            location =  $("#location").find("option:selected").val();
+            if (1 == location) {
+                count = $("#this").data("rest1");
+
+            }
+            else if (2 == location) {
+                count = $("#this").data("rest2");
+            }
+            else
+                count = $("#this").data("rest3");
+            $("#notice").text("物件剩余：" + count);
+            $("#notice").data("count", count);
+        });
+        $("#location").change(function () {
+            location = $(this).val();
+            if (1 == location) {
+                count = $("#materialId").find("option:selected").data("rest1");
+
+            }
+            else if (2 == location) {
+                count = $("#materialId").find("option:selected").data("rest2");
+            }
+            else
+                count = $("#materialId").find("option:selected").data("rest3");
+            $("#notice").text("物件剩余：" + count);
+            $("#notice").data("count", count);
+        });
+    });
+</script>
+</html>

@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<!--
+BeyondAdmin - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.2.0
+Version: 1.0.0
+Purchase: http://wrapbootstrap.com
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Head -->
+<head>
+    <meta charset="utf-8" />
+    <title>后台管理系统-物资管理</title>
+    <meta name="description" content="data tables" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--Basic Styles-->
+    <link href="${base}/css/bootstrap.min.css" rel="stylesheet" />
+    <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
+    <link href="${base}/css/font-awesome.min.css" rel="stylesheet" />
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="${base}/css/beyond.min.css" rel="stylesheet" />
+    <link href="${base}/css/demo.min.css" rel="stylesheet" />
+    <link href="${base}/css/animate.min.css" rel="stylesheet" />
+    <link id="skin-link" href="" rel="stylesheet" type="text/css" />
+
+    <!--Page Related styles-->
+    <link href="${base}/css/dataTables.bootstrap.css" rel="stylesheet" />
+
+    <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
+    <style type="text/css">
+        .page-container {
+            display: block;
+            /* margin-left: 224px; */
+            margin-right: 0;
+            margin-top: 0;
+            min-height: 100%;
+            padding: 0;
+        }
+    </style>
+</head>
+<!-- /Head -->
+<!-- Body -->
+<body>
+<!-- Main Container -->
+<div class="main-container container-fluid">
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- Page Sidebar -->
+        <!-- /Page Sidebar -->
+        <!-- Page Content -->
+        <div class="page-container">
+            <!-- Page Body -->
+            <div class="page-body">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="widget">
+                            <div class="widget-header ">
+                                <span class="widget-caption">物资出库入库记录</span>
+                            </div>
+                            <div class="widget-body">
+                                <div id="expandabledatatable_filter" class="dataTables_filter">
+                                    <form method="get" action="log" id="jvForm">
+                                    <label>
+                                        <input type="search" name="name" class="form-control input-sm" aria-controls="expandabledatatable" value="${name!}">
+                                        <input name="status" type="hidden" value="${status!}">
+                                    </label>
+                                    <label>
+                                        &nbsp;<input type="submit" class="btn btn-info" value="查询"/>
+                                    </label>
+                                        &nbsp;&nbsp;状态过滤：
+                                        <select id="status">
+                                            <option value="-1">全部</option>
+                                            <option value="1">入库</option>
+                                            <option value="2">出库</option>
+                                        </select>
+                                    </form>
+                                </div>
+                                <table class="table table-striped table-hover table-bordered" id="editabledatatable">
+                                    <thead>
+                                    <tr role="row">
+                                        <th>
+                                            ID
+                                        </th>
+                                        <th>
+                                            物资名称
+                                        </th>
+                                        <th>
+                                            库房位置
+                                        </th>
+                                        <th>
+                                            数量
+                                        </th>
+                                        <th>
+                                            经办人
+                                        </th>
+                                        <th>
+                                            审核人
+                                        </th>
+                                        <th>
+                                            类别
+                                        </th>
+                                        <th>
+                                            时间
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <#list pager.list as page>
+                                        <tr>
+                                            <td>${page.id}</td>
+                                            <td>${page.materialName}</td>
+                                            <td>
+                                                <#if page.location == 1>
+                                                    二副库房
+                                                <#elseif page.location == 2>
+                                                    退库库房
+                                                <#else>
+                                                    系统库房
+                                                </#if>
+                                            </td>
+                                            <td class="center ">${page.count}</td>
+                                            <td class="center ">${page.operator}</td>
+                                            <td class="center ">${page.auditor}</td>
+                                            <td class="center ">${(page.cate == 1) ? string('入库', '出库')}</td>
+                                            <td class="center ">${page.time?string('yyyy-MM-dd HH:mm')}</td>
+                                        </tr>
+                                    </#list>
+                                    </tbody>
+                                </table>
+                                <div class="row DTTTFooter"><div class="col-sm-6">
+                                    <div class="dataTables_info" id="editabledatatable_info" role="alert" aria-live="polite" aria-relevant="all">
+                                        共${pager.totalCount}条数据 | ${pager.totalPage} 页
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="dataTables_paginate paging_bootstrap" id="editabledatatable_paginate">
+                                        <ul class="pagination">
+                                            <li class="prev">
+                                                <a href="material/log?pageNo=1&name=${name!}">首页</a>
+                                            </li>
+                                            <li class="prev">
+                                                <a href="material/log?pageNo=${pager.prePage}&name=${name!}">上一页</a>
+                                            </li>
+                                            <#if pager.totalPage gt 0>
+                                                <#list 1..pager.totalPage as page>
+                                                    <li class="${(pager.pageNo == page) ? string('active', '')}">
+                                                        <a href="material/log?pageNo=${page}&name=${name!}">${page}</a>
+                                                    </li>
+                                                </#list>
+                                            </#if>
+                                            <li class="next">
+                                                <a href="material/log?pageNo=${pager.nextPage}&name=${name!}">下一页</a>
+                                            </li>
+                                            <li class="prev">
+                                                <a href="material/log?pageNo=${pager.totalPage}&name=${name!}">尾页</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+    <!-- /Page Container -->
+    <!-- Main Container -->
+
+</div>
+
+</body>
+<script type="application/javascript" src="${base}/js/jquery-2.0.3.min.js"></script>
+<script type="application/javascript" src="${base}/js/jquery-form.js"></script>
+<script type="application/javascript">
+    $(function () {
+        var status = `${status}`;
+        $("#status").children().each(function () {
+            if (status == $(this).val()) {
+                $(this).attr('selected', 'selected');
+            }
+        })
+        $("#status").change(function () {
+            var status = $(this).find("option:selected").val();
+            $("input[name=status]").val(status);
+            $("#jvForm").submit();
+        });
+    });
+</script>
+<!--  /Body -->
+</html>

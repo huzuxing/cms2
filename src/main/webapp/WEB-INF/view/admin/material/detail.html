@@ -1,0 +1,210 @@
+﻿<!DOCTYPE html>
+<!--
+BeyondAdmin - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.2.0
+Version: 1.0.0
+Purchase: http://wrapbootstrap.com
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Head -->
+<head>
+    <meta charset="utf-8" />
+    <title>后台管理系统-物资管理</title>
+    <meta name="description" content="data tables" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--Basic Styles-->
+    <link href="${base}/css/bootstrap.min.css" rel="stylesheet" />
+    <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
+    <link href="${base}/css/font-awesome.min.css" rel="stylesheet" />
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="${base}/css/beyond.min.css" rel="stylesheet" />
+    <link href="${base}/css/demo.min.css" rel="stylesheet" />
+    <link href="${base}/css/animate.min.css" rel="stylesheet" />
+    <link id="skin-link" href="" rel="stylesheet" type="text/css" />
+
+    <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
+    <style type="text/css">
+        .page-container {
+            display: block;
+            /* margin-left: 224px; */
+            margin-right: 0;
+            margin-top: 0;
+            min-height: 100%;
+            padding: 0;
+        }
+        input[type=checkbox] {
+            opacity: 1;
+            position: relative;
+            left: 0px;
+            z-index: 12;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<!-- /Head -->
+<!-- Body -->
+<body>
+    <!-- Main Container -->
+    <div class="main-container container-fluid">
+        <!-- Page Container -->
+        <div class="page-container">
+                <!-- Page Body -->
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6 col-xs-12">
+                            <div class="widget">
+                                <div class="widget-header bordered-bottom bordered-palegreen">
+                                    <span class="widget-caption">编辑物资</span>
+                                </div>
+                                <div class="widget-body">
+                                    <div>
+                                        <form class="form-horizontal form-bordered" role="form" method="post" action="save" id="jvForm">
+                                            <input type="hidden" name="id" value="${bean.id?if_exists}">
+                                            <input type="hidden" name="room1Rest" value="${bean.room1Rest?if_exists}">
+                                            <input type="hidden" name="room2Rest" value="${bean.room2Rest?if_exists}">
+                                            <input type="hidden" name="systemRest" value="${bean.systemRest?if_exists}">
+                                            <div class="form-group">
+                                                <label for="name" class="col-sm-2 control-label no-padding-right">物资名称</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" name="name" id="name" placeholder="" value="${bean.name?if_exists}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="techParam" class="col-sm-2 control-label no-padding-right">物资技术参数</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" name="techParam" id="techParam" placeholder="" value="${bean.techParam?if_exists}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="storeroom1" class="col-sm-2 control-label no-padding-right">二副库房</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" name="storeroom1" id="storeroom1" placeholder="" value="${bean.storeroom1?if_exists}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="storeroom2" class="col-sm-2 control-label no-padding-right">退库库房</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" name="storeroom2" id="storeroom2" placeholder="" value="${bean.storeroom2?if_exists}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="system" class="col-sm-2 control-label no-padding-right">系统库房</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" name="system" id="system" placeholder="" value="${bean.system?if_exists}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="pictures" class="col-sm-2 control-label no-padding-right">物资图片</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="pictures" placeholder="点击上传物资图片" readonly value="">
+                                                    <div id="store_pictures" style="display: none;">
+                                                        <#if pictures??>
+                                                            <#list pictures as p>
+                                                                <input type="hidden" name="pictures" value="${p.url?if_exists}">
+                                                            </#list>
+                                                        </#if>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="pictures" class="col-sm-2 control-label no-padding-right"></label>
+                                                <div class="col-sm-10" id="preview">
+                                                    <#if pictures??>
+                                                        <#list pictures as p>
+                                                            <img src='${base + p.url}' width=100 height=100/>&nbsp;&nbsp;
+                                                        </#list>
+                                                    </#if>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-2 col-sm-10">
+                                                    <button type="button" class="btn btn-palegreen save">保存</button>
+                                                    <button type="button" class="btn btn-info return">返回列表</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <form action="${base}/fileupload" method="post" enctype="multipart/form-data" style="display: none;" id="fileForm">
+                                            <input type="file" name="fileUpload" id="fileUpload" multiple onchange="preview(this)"/>
+                                            <input type="hidden" value="material" name="dir"/>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+        </div>
+        <!-- /Page Container -->
+        <!-- Main Container -->
+    </div>
+</body>
+<!--  /Body -->
+<script type="application/javascript" src="${base}/js/jquery-2.0.3.min.js"></script>
+<script type="application/javascript" src="${base}/js/jquery-form.js"></script>
+<script type="application/javascript" src="${base}/js/layer.js"></script>
+<script type="application/javascript">
+    function preview(file) {
+        $("#preview").empty();
+        for (var i = 0;i < file.files.length;i++) {
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                var img = '<img src=' + evt.target.result + ' width=100 height=100/>&nbsp;&nbsp;';
+                $("#preview").append(img);
+            }
+            reader.readAsDataURL(file.files[i]);
+        }
+        $("#preview").append('<input type="button" class="btn btn-info" value="上传" onclick="upload();">');
+    }
+
+    function upload() {
+        $("#fileForm").ajaxSubmit({
+            success : function (result) {
+                if (200 == result.status) {
+                    $("#store_pictures").empty();
+                    for(var i = 0;i < result.imgs.length;i++) {
+                        $("#store_pictures").append('<input type="hidden" name="pictures" value="' + result.imgs[i] + '">');
+                    }
+                    layer.alert("上传成功！");
+                }
+                else
+                    layer.alert("上传失败！");
+            },
+            error : function() {
+                alert("error");
+            }
+        });
+    }
+    $(function () {
+        $(".return").click(function () {
+            location.href = "${base}/admin/material";
+        });
+        $("#pictures").click(function () {
+            $("#fileUpload").click();
+        });
+        $(".save").click(function () {
+            if ("" == $("input[name=name]").val()) {
+                layer.alert("请输入物资名称！");
+                return;
+            }
+            if ("" == $("input[name=storeroom1]").val() || "" == $("input[name=storeroom2]").val()
+                || "" == $("input[name=system]").val()) {
+                layer.alert("请填写相关库存！");
+                return;
+            }
+            if (!/^\d+$/.test($("input[name=storeroom1]").val()) ||
+                    !/^\d+$/.test($("input[name=storeroom2]").val()) || !/^\d+$/.test($("input[name=system]").val())) {
+                layer.alert("库存数量必须为正整数！");
+                return;
+            }
+            $("#jvForm").submit();
+        });
+    });
+</script>
+</html>

@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<!--
+BeyondAdmin - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.2.0
+Version: 1.0.0
+Purchase: http://wrapbootstrap.com
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Head -->
+<head>
+    <meta charset="utf-8" />
+    <title>后台管理系统-现场工作管理</title>
+    <meta name="description" content="data tables" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--Basic Styles-->
+    <link href="${base}/css/bootstrap.min.css" rel="stylesheet" />
+    <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
+    <link href="${base}/css/font-awesome.min.css" rel="stylesheet" />
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="${base}/css/beyond.min.css" rel="stylesheet" />
+    <link href="${base}/css/demo.min.css" rel="stylesheet" />
+    <link href="${base}/css/animate.min.css" rel="stylesheet" />
+    <link id="skin-link" href="" rel="stylesheet" type="text/css" />
+
+    <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
+    <style type="text/css">
+        .page-container {
+            display: block;
+            /* margin-left: 224px; */
+            margin-right: 0;
+            margin-top: 0;
+            min-height: 100%;
+            padding: 0;
+        }
+        input[type=checkbox] {
+            opacity: 1;
+            position: relative;
+            left: 0px;
+            z-index: 12;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<!-- /Head -->
+<!-- Body -->
+<body>
+<!-- Main Container -->
+<div class="main-container container-fluid">
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- Page Body -->
+        <div class="page-body">
+            <div class="row">
+                <div class="col-lg-6 col-sm-6 col-xs-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-palegreen">
+                            <span class="widget-caption">查看现场工作</span>
+                        </div>
+                        <div class="widget-body">
+                            <div>
+                                <form class="form-horizontal form-bordered" role="form" method="post" action="save" id="jvForm">
+                                    <input type="hidden" name="id" value="${bean.id?if_exists}">
+                                    <div class="form-group">
+                                        <label for="chargePerson" class="col-sm-2 control-label no-padding-right">工作负责人</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" readonly id="chargePerson" placeholder="" value="${bean.chargePerson?if_exists}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="workTime" class="col-sm-2 control-label no-padding-right">工作日期</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="workTime" readonly value="${bean.workTime?if_exists?string('yyyy-MM-dd')}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="member" class="col-sm-2 control-label no-padding-right">工作班成员</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" readonly id="member" value="${bean.member?if_exists}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="context" class="col-sm-2 control-label no-padding-right">工作内容</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" readonly id="context" placeholder="" value="${bean.context?if_exists}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="workRecord" class="col-sm-2 control-label no-padding-right">工作记录</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" readonly id="workRecord" placeholder="" value="${bean.workRecord?if_exists}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="persons" class="col-sm-2 control-label no-padding-right">参会人员</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" readonly class="form-control" name="persons" id="persons" placeholder="" value="${bean.persons?if_exists}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="attention" class="col-sm-2 control-label no-padding-right">注意事项</label>
+                                        <div class="col-sm-10">
+                                            <textarea cols="100" readonly rows="10" name="attention" id="attention">${bean.attention?if_exists}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <button type="button" class="btn btn-info return">返回列表</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Body -->
+    </div>
+    <!-- /Page Content -->
+</div>
+<!-- /Page Container -->
+<!-- Main Container -->
+</div>
+</body>
+<!--  /Body -->
+<script type="application/javascript" src="${base}/js/jquery-2.0.3.min.js"></script>
+<script type="application/javascript">
+    $(function () {
+        $(".return").click(function () {
+            location.href = "${base}/admin/scenework";
+        });
+    });
+</script>
+</html>
