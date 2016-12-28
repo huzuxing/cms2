@@ -158,6 +158,49 @@ public class ToolsDaoImpl extends HibernateTempDao<Tools> implements ToolsDao {
         }
     }
 
+    @Override
+    public Tools getToolsByName(String name) {
+        Session session = null;
+        try {
+            session = getSession();
+            Finder finder = new Finder("select o from Tools o where o.name=:name", session);
+            finder.setParameter("name", name);
+            Tools bean = (Tools) finder.uniqueResult();
+            return bean;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (null != session && session.isOpen())
+                session.close();
+        }
+    }
+
+    @Override
+    public void toolsOutOrInBatch(List<Tools> toolses, List<ToolsLog> toolsLogs) throws Exception {
+        if (toolses.size() != toolsLogs.size())
+            throw new Exception("toolses size not equal toolsLogs size ...");
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = getSession();
+            tx = session.beginTransaction();
+            int size = toolses.size();
+            for (int i = 0;i < size;i++) {
+                session.update(toolses.get(i));
+                session.save(toolsLogs.get(i));
+            }
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (null != tx)
+                tx.rollback();
+        } finally {
+            if (null != session && session.isOpen())
+                session.close();
+        }
+    }
+
     private void addToolsLogParams(ToolsLog bean, Finder finder) {
         if (null != bean) {
             if (null != bean.getId()) {

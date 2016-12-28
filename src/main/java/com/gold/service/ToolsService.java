@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by huzuxing on 2016/9/24.
@@ -79,4 +80,11 @@ public class ToolsService {
         return toolsDao.getToolsLogById(id);
     }
 
+    public Tools getToolsByName(String name) {
+        return toolsDao.getToolsByName(name);
+    }
+
+    public void toolsOutOrInBatch(List<Tools> toolses, List<ToolsLog> toolsLogs) throws Exception {
+        toolsDao.toolsOutOrInBatch(toolses,toolsLogs);
+    }
 }

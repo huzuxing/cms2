@@ -19,4 +19,6 @@ public interface ToolsDao {
     public List<ToolsLog> getToolsLogList(ToolsLog bean, Integer pageNo, Integer pageSize);
     public Integer getToolsLogTotalCount(ToolsLog bean);
     public ToolsLog getToolsLogById(Integer id);
+    public Tools getToolsByName(String name);
+    public void toolsOutOrInBatch(List<Tools> toolses, List<ToolsLog> toolsLogs) throws Exception;
 }

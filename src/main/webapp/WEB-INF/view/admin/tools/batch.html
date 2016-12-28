@@ -8,22 +8,22 @@ Purchase: http://wrapbootstrap.com
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Head -->
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>后台管理系统-工器具管理</title>
-    <meta name="description" content="data tables" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="data tables"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <!--Basic Styles-->
-    <link href="${base}/css/bootstrap.min.css" rel="stylesheet" />
-    <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
-    <link href="${base}/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="${base}/css/bootstrap.min.css" rel="stylesheet"/>
+    <link id="bootstrap-rtl-link" href="" rel="stylesheet"/>
+    <link href="${base}/css/font-awesome.min.css" rel="stylesheet"/>
 
     <!--Beyond styles-->
-    <link id="beyond-link" href="${base}/css/beyond.min.css" rel="stylesheet" />
-    <link href="${base}/css/demo.min.css" rel="stylesheet" />
-    <link href="${base}/css/animate.min.css" rel="stylesheet" />
-    <link id="skin-link" href="" rel="stylesheet" type="text/css" />
-    <link href="${base}/css/bootstrap-select.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="${base}/css/beyond.min.css" rel="stylesheet"/>
+    <link href="${base}/css/demo.min.css" rel="stylesheet"/>
+    <link href="${base}/css/animate.min.css" rel="stylesheet"/>
+    <link id="skin-link" href="" rel="stylesheet" type="text/css"/>
+    <link href="${base}/css/bootstrap-select.min.css" rel="stylesheet"/>
     <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
     <style type="text/css">
         .page-container {
@@ -34,6 +34,7 @@ Purchase: http://wrapbootstrap.com
             min-height: 100%;
             padding: 0;
         }
+
         input[type=checkbox] {
             opacity: 1;
             position: relative;
@@ -43,7 +44,8 @@ Purchase: http://wrapbootstrap.com
             height: 18px;
             cursor: pointer;
         }
-        .black_overlay{
+
+        .black_overlay {
             display: none;
             position: absolute;
             top: 0%;
@@ -51,11 +53,12 @@ Purchase: http://wrapbootstrap.com
             width: 100%;
             height: 100%;
             background-color: black;
-            z-index:1001;
+            z-index: 1001;
             -moz-opacity: 0.8;
-            opacity:.80;
+            opacity: .80;
             filter: alpha(opacity=80);
         }
+
         .white_content {
             display: none;
             position: absolute;
@@ -65,9 +68,10 @@ Purchase: http://wrapbootstrap.com
             height: 25%;
             border: 16px solid lightblue;
             background-color: white;
-            z-index:1002;
+            z-index: 1002;
             overflow: auto;
         }
+
         .white_content_large {
             display: none;
             position: absolute;
@@ -77,9 +81,10 @@ Purchase: http://wrapbootstrap.com
             height: 60%;
             border: 16px solid lightblue;
             background-color: white;
-            z-index:1002;
+            z-index: 1002;
             overflow: auto;
         }
+
         .white_content_small {
             display: none;
             position: absolute;
@@ -89,7 +94,7 @@ Purchase: http://wrapbootstrap.com
             height: 50%;
             border: 16px solid lightblue;
             background-color: white;
-            z-index:1002;
+            z-index: 1002;
             overflow: auto;
         }
     </style>
@@ -97,153 +102,170 @@ Purchase: http://wrapbootstrap.com
 <!-- /Head -->
 <!-- Body -->
 <body>
-    <!-- Main Container -->
-    <div class="main-container container-fluid">
-        <!-- Page Container -->
-        <div class="page-container">
-                <!-- Page Body -->
-                <div class="page-body">
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-xs-12">
-                            <div class="widget">
-                                <div class="widget-header bordered-bottom bordered-palegreen">
-                                    <span class="widget-caption">批量处理</span>
-                                </div>
-                                <div class="widget-body">
-                                    <div>
-                                        <form class="form-horizontal form-bordered" role="form" method="post" action="save" id="jvForm">
-                                            <#if status??>
-                                                <input type="hidden" name="status" value="${status}">
-                                            </#if>
-                                            <div class="form-group">
-                                                <label for="name" class="col-sm-2 control-label no-padding-right">工器具名称</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" name="name" id="name" placeholder="" value="">
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <a id="choosePerson" href="javascript:;" onclick="ShowDiv('toolsSelectDiv','toolsSelectFade')" class="btn btn-info">
-                                                        <i class="fa fa-plus-square"></i>
-                                                        选择工器具
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <#if status??>
-                                                <div class="form-group">
-                                                    <label for="name" class="col-sm-2 control-label no-padding-right">${(status == 1) ? string('借用','归还')}时间</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" onfocus="WdatePicker({dateFmt : 'yyyy-MM-dd HH:mm', readOnly : true})" name="time" id="time" placeholder="" value="">
-                                                    </div>
-                                                </div>
-                                                <#if status == 1>
-                                                    <div class="form-group">
-                                                        <label for="name" class="col-sm-2 control-label no-padding-right">借用事由</label>
-                                                        <div class="col-sm-10">
-                                                            <textarea class="form-control" cols="100" rows="10" name="reason" id="reason"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </#if>
-                                                <div class="form-group">
-                                                    <label for="name" class="col-sm-2 control-label no-padding-right">${(status == 1) ? string('借用','归还')}人</label>
-                                                    <div class="col-sm-3">
-                                                        <input type="text" class="form-control" name="operator" id="operator" placeholder="" value="">
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <a id="choosePerson" href="javascript:;" onclick="ShowDiv('MyDiv','fade')" class="btn btn-info">
-                                                            <i class="fa fa-plus-square"></i>
-                                                            选择班组人员
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <#if status == 1>
-                                                    <div class="form-group">
-                                                        <label for="phone" class="col-sm-2 control-label no-padding-right">借用人电话</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control" name="phone" id="phone" placeholder="" value="">
-                                                        </div>
-                                                    </div>
-                                                </#if>
-                                                <div class="form-group">
-                                                    <label for="name" class="col-sm-2 control-label no-padding-right">审核人</label>
-                                                    <div class="col-sm-10">
-                                                        <select name="auditor">
-                                                            <#list staff as bean>
-                                                                <option value="${bean.name}">${bean.name}</option>
-                                                            </#list>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </#if>
-                                            <div class="form-group">
-                                                <div class="col-sm-offset-2 col-sm-10">
-                                                    <button type="button" class="btn btn-palegreen save">提交</button>
-                                                </div>
-                                            </div>
-                                        </form>
+<!-- Main Container -->
+<div class="main-container container-fluid">
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- Page Body -->
+        <div class="page-body">
+            <div class="row">
+                <div class="col-lg-6 col-sm-6 col-xs-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-palegreen">
+                            <span class="widget-caption">批量处理</span>
+                        </div>
+                        <div class="widget-body">
+                            <div>
+                                <form class="form-horizontal form-bordered" role="form" method="post" action="batch"
+                                      id="jvForm">
+                                    <#if status??>
+                                        <input type="hidden" name="status" value="${status}">
+                                    </#if>
+                                    <div class="form-group">
+                                        <label for="tools" class="col-sm-2 control-label no-padding-right">工器具名称</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" name="tools" id="tools"
+                                                   placeholder="工器具名称以英文逗号分开" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <a id="" href="javascript:;"
+                                               onclick="ShowDiv('toolsSelectDiv','toolsSelectFade')"
+                                               class="btn btn-info">
+                                                <i class="fa fa-plus-square"></i>
+                                                选择工器具
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
+                                    <#if status??>
+                                        <div class="form-group">
+                                            <label for="tools" class="col-sm-2 control-label no-padding-right">${(status
+                                                == 1) ? string('借用','归还')}时间</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control"
+                                                       onfocus="WdatePicker({dateFmt : 'yyyy-MM-dd HH:mm', readOnly : true})"
+                                                       name="time" id="time" placeholder="" value="">
+                                            </div>
+                                        </div>
+                                        <#if status == 1>
+                                            <div class="form-group">
+                                                <label for="tools"
+                                                       class="col-sm-2 control-label no-padding-right">借用事由</label>
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" cols="100" rows="10" name="reason"
+                                                              id="reason"></textarea>
+                                                </div>
+                                            </div>
+                                        </#if>
+                                        <div class="form-group">
+                                            <label for="tools" class="col-sm-2 control-label no-padding-right">${(status
+                                                == 1) ? string('借用','归还')}人</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control" name="operator" id="operator"
+                                                       placeholder="" value="">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <a id="choosePerson" href="javascript:;"
+                                                   onclick="ShowDiv('MyDiv','fade')" class="btn btn-info">
+                                                    <i class="fa fa-plus-square"></i>
+                                                    选择班组人员
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <#if status == 1>
+                                            <div class="form-group">
+                                                <label for="phone"
+                                                       class="col-sm-2 control-label no-padding-right">借用人电话</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" name="phone" id="phone"
+                                                           placeholder="" value="">
+                                                </div>
+                                            </div>
+                                        </#if>
+                                        <div class="form-group">
+                                            <label for="tools"
+                                                   class="col-sm-2 control-label no-padding-right">审核人</label>
+                                            <div class="col-sm-10">
+                                                <select name="auditor" class="selectpicker" data-live-search="true">
+                                                    <#list staff as bean>
+                                                        <option value="${bean.name}">${bean.name}</option>
+                                                    </#list>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </#if>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <button type="button" class="btn btn-palegreen save">提交</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- /Page Body -->
             </div>
-            <!-- /Page Content -->
         </div>
-        <!-- /Page Container -->
-        <!-- Main Container -->
+        <!-- /Page Body -->
     </div>
+    <!-- /Page Content -->
+</div>
+<!-- /Page Container -->
+<!-- Main Container -->
+</div>
 
-    <!--弹出层时背景层DIV-->
-    <div id="fade" class="black_overlay">
+<!--弹出层时背景层DIV-->
+<div id="fade" class="black_overlay">
+</div>
+<div id="MyDiv" class="white_content_large">
+    <div style="text-align: right; cursor: default; height: 40px;">
+        <span style="font-size: 16px;cursor: pointer" onclick="CloseDiv('MyDiv','fade')"><i
+                class="fn-delete"></i>关闭</span>
     </div>
-    <div id="MyDiv" class="white_content">
-        <div style="text-align: right; cursor: default; height: 40px;">
-            <span style="font-size: 16px;cursor: pointer" onclick="CloseDiv('MyDiv','fade')"><i class="fn-delete"></i>关闭</span>
-        </div>
-        <div style="text-align: center;display: inline">
-            <div class="form-group">
-                <div class="col-sm-6">
-                    请选择人员：
-                    <select id="chooser">
-                        <#list staff as bean>
-                            <option data-phone="${bean.phone}" value="${bean.name}">${bean.name}</option>
-                        </#list>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <input type="button" class="btn btn-info" onclick="sure();" value="确定">
-                </div>
+    <div style="text-align: center;display: inline">
+        <div class="form-group">
+            <div class="col-sm-9">
+                请选择人员：
+                <select id="operatorChooser" class="selectpicker" data-live-search="true">
+                    <#list staff as bean>
+                        <option data-phone="${bean.phone}" value="${bean.name}">${bean.name}</option>
+                    </#list>
+                </select>
             </div>
         </div>
+        <div class="form-group">
+            <div class="col-sm-3">
+                <input type="button" class="btn btn-info" data-type="operator" onclick="sure(this);" value="确定">
+            </div>
+        </div>
     </div>
+</div>
 
-    <!--弹出层时背景层DIV-->
-    <div id="toolsSelectFade" class="black_overlay">
+<!--弹出层时背景层DIV-->
+<div id="toolsSelectFade" class="black_overlay">
+</div>
+<div id="toolsSelectDiv" class="white_content_large">
+    <div style="text-align: right; cursor: default; height: 40px;">
+        <span style="font-size: 16px;cursor: pointer" onclick="CloseDiv('toolsSelectDiv','toolsSelectFade')"><i
+                class="fn-delete"></i>关闭</span>
     </div>
-    <div id="toolsSelectDiv" class="white_content_large">
-        <div style="text-align: right; cursor: default; height: 40px;">
-            <span style="font-size: 16px;cursor: pointer" onclick="CloseDiv('toolsSelectDiv','toolsSelectFade')"><i class="fn-delete"></i>关闭</span>
-        </div>
-        <div style="text-align: center;display: inline">
-            <div class="form-group">
-                <div class="col-sm-9">
-                    请选择工器具：
-                    <select id="toolsChooser" class= "form-control selectpicker" multiple>
-                        <#list tools as bean>
-                            <option data-phone="${bean.phone}" value="${bean.name}">${bean.name}</option>
-                        </#list>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-3">
-                    <input type="button" class="btn btn-info" onclick="sure();" value="确定">
-                </div>
+    <div style="text-align: center;display: inline">
+        <div class="form-group">
+            <div class="col-sm-9">
+                请选择工器具：
+                <select id="toolsChooser" class="selectpicker" multiple data-live-search="true">
+                    <#list tools as bean>
+                        <option data-phone="${bean.phone}" value="${bean.name}">${bean.name}</option>
+                    </#list>
+                </select>
             </div>
         </div>
+        <div class="form-group">
+            <div class="col-sm-3">
+                <input type="button" class="btn btn-info" data-type="tools" onclick="sure(this);" value="确定">
+            </div>
+        </div>
     </div>
+</div>
 
 
 </body>
@@ -252,34 +274,42 @@ Purchase: http://wrapbootstrap.com
 <script type="application/javascript" src="${base}/js/jquery-form.js"></script>
 <script type="application/javascript" src="${base}/js/layer.js"></script>
 <script type="application/javascript" src="${base}/js/My97DatePicker/WdatePicker.js"></script>
+<script type="application/javascript" src="${base}/js/bootstrap.min.js"></script>
 <script type="application/javascript" src="${base}/js/bootstrap-select.min.js"></script>
 <script type="application/javascript">
 
     //弹出隐藏层
-    function ShowDiv(show_div,bg_div){
-        document.getElementById(show_div).style.display='block';
-        document.getElementById(bg_div).style.display='block' ;
+    function ShowDiv(show_div, bg_div) {
+        document.getElementById(show_div).style.display = 'block';
+        document.getElementById(bg_div).style.display = 'block';
         var bgdiv = document.getElementById(bg_div);
         bgdiv.style.width = document.body.scrollWidth;
 // bgdiv.style.height = $(document).height();
-        $("#"+bg_div).height($(document).height());
-    };
+        $("#" + bg_div).height($(document).height());
+    }
+    ;
     //关闭弹出层
-    function CloseDiv(show_div,bg_div)
-    {
-        document.getElementById(show_div).style.display='none';
-        document.getElementById(bg_div).style.display='none';
-    };
+    function CloseDiv(show_div, bg_div) {
+        document.getElementById(show_div).style.display = 'none';
+        document.getElementById(bg_div).style.display = 'none';
+    }
+    ;
 
-    function sure() {
-        var person = $("#chooser").find("option:selected").val();
-        var phone = $("#chooser").find("option:selected").data("phone");
-        $("#operator").val(person);
-        $("#phone").val(phone);
+    function sure(obj) {
+        var type = $(obj).data("type");
+        var value = $("#" + type + "Chooser").siblings('.bootstrap-select').children('button').attr('title');
+        var phone = $("#" + type + "Chooser").find("option:selected").data("phone");
+        $("#" + type).val(value);
+        if (phone && "" != phone)
+            $("#phone").val(phone);
         CloseDiv("MyDiv", "fade");
+        CloseDiv("toolsSelectDiv", "toolsSelectFade");
     }
 
     $(function () {
+        $('.selectpicker').selectpicker({
+            'selectedText': ''
+        });
         var status = `${status}`;
         $("#operator").change(function () {
             var phone = $(this).find("option:selected").data("phone");
@@ -292,7 +322,7 @@ Purchase: http://wrapbootstrap.com
             $("#fileUpload").click();
         });
         $(".save").click(function () {
-            if ("" == $("input[name=name]").val()) {
+            if ("" == $("input[name=tools]").val()) {
                 layer.alert("请输入工器具名称!");
                 return;
             }
@@ -316,7 +346,24 @@ Purchase: http://wrapbootstrap.com
                     return;
                 }
             }
-            $("#jvForm").submit();
+            $("#jvForm").ajaxSubmit({
+                beforeSend: function () {
+                    $(this).attr('disabled', 'disabled');
+                },
+                success: function (result) {
+                    if (200 == result.status) {
+                        var i = layer.alert("操作成功！", function () {
+                            layer.close(i);
+                            window.location.reload();
+                        });
+                    }
+                    else
+                        layer.alert(result.msg);
+                },
+                complete: function () {
+                    $(this).removeAttr('disabled');
+                }
+            });
         });
     });
 </script>

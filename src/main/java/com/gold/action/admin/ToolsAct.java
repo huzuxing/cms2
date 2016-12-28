@@ -2,10 +2,12 @@ package com.gold.action.admin;
 
 import com.gold.entity.Staff;
 import com.gold.entity.Tools;
+import com.gold.entity.ToolsLog;
 import com.gold.service.StaffService;
 import com.gold.service.ToolsService;
 import com.gold.util.JsonUtils;
 import com.gold.util.ResponseUtils;
+import com.gold.util.StringUtils;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -121,7 +124,7 @@ public class ToolsAct {
         if (null != status) {
             model.addAttribute("status", status);
             // 当status==1,说明是借出，则查询在库的工器具，归还相反。
-            List<Tools> list = toolsService.getToolsList(null, status == 1 ? 0 : status, null, null, null).getList();
+            List<Tools> list = toolsService.getToolsList(null, status == 1 ? 0 : 1, null, null, null).getList();
             model.addAttribute("tools", list);
             List<Staff> staffs = staffService.getStaffList(null, null, null, null).getList();
             model.addAttribute("staff", staffs);
@@ -129,12 +132,55 @@ public class ToolsAct {
         return "admin/tools/batch";
     }
     @RequestMapping(value = "/tools/batch", method = RequestMethod.POST)
-    public void batchsave(HttpServletRequest request, HttpServletResponse response, ModelMap model, Integer status) {
-        if (null != status) {
-            model.addAttribute("status", status);
-            List<Staff> list = staffService.getStaffList(null, null, null, null).getList();
-            model.addAttribute("staff", list);
+    public void batchsave(ToolsLog bean, String tools, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+        JsonObject obj = new JsonObject();
+        if (null == bean || StringUtils.isNullOrEmpty(tools)) {
+            obj.addProperty("status", 0);
+            obj.addProperty("msg", "bean attrs not defined ...");
         }
+        else {
+            String[] toolsNames = tools.split(",");
+            List<Tools> list = new ArrayList<>();
+            for(String name : toolsNames) {
+                Tools  entity = toolsService.getToolsByName(name.trim());
+                if (null == entity) {
+                    break;
+                }
+                list.add(entity);
+            }
+            if (toolsNames.length != list.size()) {
+                obj.addProperty("status", 0);
+                obj.addProperty("msg", "some of the tools not exist ...");
+            }
+            else {
+                List<ToolsLog> toolsLogs = new ArrayList<>(list.size());//  批量处理，保证两个list大小一致
+                for(Tools t : list) {
+                    t.setStatus(bean.getStatus());
+                    bean.setToolsName(t.getName());
+                    bean.setToolsId(t.getId());
+                    ToolsLog tl = new ToolsLog();
+                    tl.setToolsId(t.getId());
+                    tl.setPhone(bean.getPhone());
+                    tl.setStatus(bean.getStatus());
+                    tl.setToolsName(t.getName());
+                    tl.setTime(bean.getTime());
+                    tl.setCreateTime(new Date());
+                    tl.setAuditor(bean.getAuditor());
+                    tl.setOperator(bean.getOperator());
+                    tl.setReason(bean.getReason());
+                    toolsLogs.add(tl);
+                }
+                try {
+                    toolsService.toolsOutOrInBatch(list, toolsLogs);
+                    obj.addProperty("status", 200);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    obj.addProperty("status", 0);
+                    obj.addProperty("msg", e.getMessage());
+                }
+            }
+        }
+        ResponseUtils.sendResponseJson(response, obj);
     }
     @Autowired
     private ToolsService toolsService;
