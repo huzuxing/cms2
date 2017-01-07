@@ -1,8 +1,10 @@
 package com.gold.action.admin;
 
 import com.gold.entity.News;
+import com.gold.entity.Staff;
 import com.gold.entity.TeamGroup;
 import com.gold.service.NewsService;
+import com.gold.service.StaffService;
 import com.gold.service.TeamGroupService;
 import com.gold.util.ResponseUtils;
 import com.google.gson.Gson;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * Created by huzuxing on 2016/9/22.
@@ -35,13 +38,13 @@ public class TeamGroupAct {
     @RequestMapping(value = "/teamgroup/detail", method = RequestMethod.GET)
     public String add(Integer id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
         if (null != id)
-            model.addAttribute("bean", teamGroupService.getToolsById(id));
+            model.addAttribute("bean", teamGroupService.getTeamGroupById(id));
         return "admin/teamgroup/detail";
     }
     @RequestMapping(value = "/teamgroup/check", method = RequestMethod.GET)
     public String check(Integer id, boolean readOnly, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
         if (null != id)
-            model.addAttribute("bean", teamGroupService.getToolsById(id));
+            model.addAttribute("bean", teamGroupService.getTeamGroupById(id));
         return "admin/teamgroup/check";
     }
     @RequestMapping(value = "/teamgroup/save", method = RequestMethod.POST)
@@ -56,8 +59,14 @@ public class TeamGroupAct {
     public void delete(Integer id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
         JsonObject obj = new JsonObject();
         try {
-            teamGroupService.delete(id);
-            obj.addProperty("status", 200);
+            List<Staff> staffs = staffService.getStaffsByTeamGroupId(id);
+            if (null != staffs && staffs.size() > 0) {
+                obj.addProperty("status", 600);
+            }
+            else {
+                teamGroupService.delete(id);
+                obj.addProperty("status", 200);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             obj.addProperty("status", 0);
@@ -65,6 +74,18 @@ public class TeamGroupAct {
         }
         ResponseUtils.sendResponseJson(response, obj);
     }
+
+    @RequestMapping(value = "/teamgroup/member", method = RequestMethod.GET)
+    public String member(Integer id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+        if (null != id) {
+            model.addAttribute("members", staffService.getStaffsByTeamGroupId(id));
+            model.addAttribute("teamGroupName", teamGroupService.getTeamGroupById(id).getName());
+        }
+        return "admin/teamgroup/member";
+    }
     @Autowired
     private TeamGroupService teamGroupService;
+
+    @Autowired
+    private StaffService staffService;
 }

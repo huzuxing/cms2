@@ -9,7 +9,7 @@ Purchase: http://wrapbootstrap.com
 <!-- Head -->
 <head>
     <meta charset="utf-8" />
-    <title>后台管理系统-资讯管理</title>
+    <title>后台管理系统-人员管理</title>
     <meta name="description" content="data tables" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -23,6 +23,7 @@ Purchase: http://wrapbootstrap.com
     <link href="${base}/css/demo.min.css" rel="stylesheet" />
     <link href="${base}/css/animate.min.css" rel="stylesheet" />
     <link id="skin-link" href="" rel="stylesheet" type="text/css" />
+    <link href="${base}/css/bootstrap-select.min.css" rel="stylesheet" />
 
     <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
     <style type="text/css">
@@ -33,15 +34,6 @@ Purchase: http://wrapbootstrap.com
             margin-top: 0;
             min-height: 100%;
             padding: 0;
-        }
-        input[type=checkbox] {
-            opacity: 1;
-            position: relative;
-            left: 0px;
-            z-index: 12;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
         }
     </style>
 </head>
@@ -58,43 +50,71 @@ Purchase: http://wrapbootstrap.com
                         <div class="col-lg-6 col-sm-6 col-xs-12">
                             <div class="widget">
                                 <div class="widget-header bordered-bottom bordered-palegreen">
-                                    <span class="widget-caption">添加资讯</span>
+                                    <span class="widget-caption">编辑人员</span>
                                 </div>
                                 <div class="widget-body">
                                     <div>
                                         <form class="form-horizontal form-bordered" role="form" method="post" action="save" id="jvForm">
                                             <input type="hidden" name="id" value="${bean.id?if_exists}">
                                             <div class="form-group">
-                                                <label for="title" class="col-sm-2 control-label no-padding-right">标题</label>
+                                                <label for="name" class="col-sm-2 control-label no-padding-right">姓名</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" name="title" id="title" placeholder="title" value="${bean.title?if_exists}">
+                                                    <input type="text" class="form-control" name="name" id="name" placeholder="" value="${bean.name?if_exists}">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="description" class="col-sm-2 control-label no-padding-right">描述</label>
+                                                <label for="introduction" class="col-sm-2 control-label no-padding-right">介绍</label>
                                                 <div class="col-sm-10">
-                                                    <textarea cols="100" rows="10" name="description" id="description">${bean.description?if_exists}</textarea>
+                                                    <textarea class="form-control" cols="100" rows="10" name="introduction" id="introduction">${bean.introduction?if_exists}</textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="imgurl" class="col-sm-2 control-label no-padding-right">缩略图</label>
+                                                <label for="phone" class="col-sm-2 control-label no-padding-right">电话</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="imgUrl" placeholder="点击上传缩略图" readonly value="${bean.imgUrl?if_exists}">
-                                                    <input type="hidden" name="imgUrl" value="${bean.imgUrl?if_exists}">
+                                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="" value="${bean.phone?if_exists}">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="imgurl" class="col-sm-2 control-label no-padding-right"></label>
+                                                <label for="name" class="col-sm-2 control-label no-padding-right">职位</label>
+                                                <div class="col-sm-10">
+                                                    <select name="job" class="selectpicker" data-live-search="true">
+                                                        <#list ['班组长', '班组工程师', '班组安全员', '班组成员'] as job>
+                                                            <#if job_index == bean.job>
+                                                                <option value="${job_index}" selected>${job}</option>
+                                                                <#else/>
+                                                                <option value="${job_index}">${job}</option>
+                                                            </#if>
+                                                        </#list>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name" class="col-sm-2 control-label no-padding-right">所属班组</label>
+                                                <div class="col-sm-10">
+                                                    <select name="teamId" class="selectpicker" data-live-search="true">
+                                                        <#list teamgroup as t>
+                                                            <#if t.id == bean.teamId>
+                                                                <option value="${t.id}" selected>${t.name}</option>
+                                                                <#else/>
+                                                                <option value="${t.id}">${t.name}</option>
+                                                            </#if>
+                                                        </#list>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="img" class="col-sm-2 control-label no-padding-right">图片</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="img" placeholder="点击上传图片" readonly value="${bean.img?if_exists}">
+                                                    <input type="hidden" name="img" value="${bean.img?if_exists}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="img" class="col-sm-2 control-label no-padding-right"></label>
                                                 <div class="col-sm-10" id="preview">
-                                                    <#if (bean.imgUrl)>
-                                                        <img src='${base + bean.imgUrl}' width=200 height=200/>
+                                                    <#if (bean.img)>
+                                                        <img src='${base + bean.img}' width=200 height=200/>
                                                     </#if>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="isPublish" class="col-sm-2 control-label no-padding-right">是否发布</label>
-                                                <div class="col-sm-10">
-                                                    <input type="checkbox" class="choose" id="isPublish" name="isPublish" checked="checked"/>是
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -106,7 +126,7 @@ Purchase: http://wrapbootstrap.com
                                         </form>
                                         <form action="${base}/fileupload" method="post" enctype="multipart/form-data" style="display: none;" id="fileForm">
                                             <input type="file" name="fileUpload" id="fileUpload" onchange="preview(this)"/>
-                                            <input type="hidden" value="news" name="dir"/>
+                                            <input type="hidden" value="user" name="dir"/>
                                         </form>
                                     </div>
                                 </div>
@@ -126,6 +146,8 @@ Purchase: http://wrapbootstrap.com
 <script type="application/javascript" src="${base}/js/jquery-2.0.3.min.js"></script>
 <script type="application/javascript" src="${base}/js/jquery-form.js"></script>
 <script type="application/javascript" src="${base}/js/layer.js"></script>
+<script type="application/javascript" src="${base}/js/bootstrap.min.js"></script>
+<script type="application/javascript" src="${base}/js/bootstrap-select.min.js"></script>
 <script type="application/javascript">
     function preview(file) {
         $("#preview").empty();
@@ -143,8 +165,8 @@ Purchase: http://wrapbootstrap.com
         $("#fileForm").ajaxSubmit({
             success : function (result) {
                 if (200 == result.status) {
-                    $("#imgUrl").val(result.imgs[0]);
-                    $("input[name=imgUrl]").val(result.imgs[0]);
+                    $("#img").val(result.imgs[0]);
+                    $("input[name=img]").val(result.imgs[0]);
                     layer.alert("上传成功！");
                 }
                 else
@@ -156,10 +178,13 @@ Purchase: http://wrapbootstrap.com
         });
     }
     $(function () {
-        $(".return").click(function () {
-            location.href = "${base}/admin/news";
+        $('.selectpicker').selectpicker({
+            'selectedText': ''
         });
-        $("#imgUrl").click(function () {
+        $(".return").click(function () {
+            location.href = "${base}/admin/staff";
+        });
+        $("#img").click(function () {
             $("#fileUpload").click();
         });
         $(".save").click(function () {

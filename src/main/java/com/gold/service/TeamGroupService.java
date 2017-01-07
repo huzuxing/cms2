@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by huzuxing on 2016/10/8.
@@ -30,7 +31,7 @@ public class TeamGroupService {
         bean.setId(id);
         Pager pager = new Pager(QueryUtils.pageNoCheck(pageNo), QueryUtils.pageSizeCheck(pageSize));
         pager.setTotalCount(teamGroupDao.getTotalCount(bean));
-        pager.setList(teamGroupDao.getTeamGroupList(bean, null, null));
+        pager.setList(teamGroupDao.getTeamGroupList(bean, QueryUtils.pageNoCheck(pageNo), QueryUtils.pageSizeCheck(pageSize)));
         return pager;
     }
 
@@ -41,11 +42,15 @@ public class TeamGroupService {
         }
     }
 
-    public TeamGroup getToolsById(Integer id) {
+    public TeamGroup getTeamGroupById(Integer id) {
         return teamGroupDao.getById(id);
     }
 
     public void update(TeamGroup bean) {
         teamGroupDao.update(bean);
+    }
+
+    public List<TeamGroup> getTeamGroups() {
+        return teamGroupDao.getTeamGroupList(null, null, null);
     }
 }

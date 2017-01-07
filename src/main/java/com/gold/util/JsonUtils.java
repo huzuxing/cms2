@@ -174,6 +174,7 @@ public class JsonUtils {
                 obj.addProperty("chargePerson", bean.getChargePerson());
                 obj.addProperty("workTime", commonUtils.dateFormat("yyyy-MM-dd HH:mm", bean.getWorkTime()));
                 obj.addProperty("sort", bean.getSort());
+                obj.addProperty("context", bean.getContext());
                 array.add(obj);
             });
             SceneWork entity = lists.get(0);
@@ -237,6 +238,22 @@ public class JsonUtils {
         obj.addProperty("auditor", bean.getAuditor());
         obj.addProperty("operator", bean.getOperator());
         return obj;
+    }
+
+    public static JsonArray bannerListToJsonArray(List<Banner> lists) {
+        JsonArray array = new JsonArray();
+        if (null == lists || lists.size() == 0) {
+            return array;
+        }
+        lists.forEach(bean -> {
+            JsonObject obj = new JsonObject();
+            obj.addProperty("id", bean.getId());
+            obj.addProperty("url", bean.getUrl());
+            obj.addProperty("img", bean.getImg());
+            obj.addProperty("cate", bean.getCate());
+            array.add(obj);
+        });
+        return array;
     }
 
 }

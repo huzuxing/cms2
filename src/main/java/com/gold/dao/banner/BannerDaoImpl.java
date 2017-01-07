@@ -29,7 +29,7 @@ public class BannerDaoImpl extends HibernateTempDao<Banner> implements BannerDao
             if (null == list || list.size() <= 0) {
                 throw new Exception("null Banner to save ...");
             }
-            Finder finder = new Finder("delete o from Banner o where o.cate=:cate", session);
+            Finder finder = new Finder("delete from Banner where cate=:cate", session);
             finder.setParameter("cate", list.get(0).getCate());
             finder.executeUpdate();
             for(Banner banner : list) {
@@ -48,6 +48,12 @@ public class BannerDaoImpl extends HibernateTempDao<Banner> implements BannerDao
 
     @Override
     public List<Banner> getBanners(Banner bean) {
-        return null;
+        Finder finder = new Finder("select o from Banner o where 1=1");
+        if (null != bean) {
+            if (null != bean.getCate())
+            finder.append(" and o.cate=:cate");
+            finder.setParameter("cate", bean.getCate());
+        }
+        return queryList(finder);
     }
 }

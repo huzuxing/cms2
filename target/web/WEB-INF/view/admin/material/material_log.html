@@ -137,23 +137,23 @@ Purchase: http://wrapbootstrap.com
                                     <div class="dataTables_paginate paging_bootstrap" id="editabledatatable_paginate">
                                         <ul class="pagination">
                                             <li class="prev">
-                                                <a href="material/log?pageNo=1&name=${name!}">首页</a>
+                                                <a href="log?pageNo=1&name=${name!}">首页</a>
                                             </li>
                                             <li class="prev">
-                                                <a href="material/log?pageNo=${pager.prePage}&name=${name!}">上一页</a>
+                                                <a href="log?pageNo=${pager.prePage}&name=${name!}">上一页</a>
                                             </li>
                                             <#if pager.totalPage gt 0>
                                                 <#list 1..pager.totalPage as page>
                                                     <li class="${(pager.pageNo == page) ? string('active', '')}">
-                                                        <a href="material/log?pageNo=${page}&name=${name!}">${page}</a>
+                                                        <a href="log?pageNo=${page}&name=${name!}">${page}</a>
                                                     </li>
                                                 </#list>
                                             </#if>
                                             <li class="next">
-                                                <a href="material/log?pageNo=${pager.nextPage}&name=${name!}">下一页</a>
+                                                <a href="log?pageNo=${pager.nextPage}&name=${name!}">下一页</a>
                                             </li>
                                             <li class="prev">
-                                                <a href="material/log?pageNo=${pager.totalPage}&name=${name!}">尾页</a>
+                                                <a href="log?pageNo=${pager.totalPage}&name=${name!}">尾页</a>
                                             </li>
                                         </ul>
                                     </div>

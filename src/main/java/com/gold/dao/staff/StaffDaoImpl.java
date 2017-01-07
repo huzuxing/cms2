@@ -3,6 +3,7 @@ package com.gold.dao.staff;
 import com.gold.common.Finder;
 import com.gold.dao.HibernateTempDao;
 import com.gold.entity.Staff;
+import com.gold.util.StringUtils;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -80,6 +81,14 @@ public class StaffDaoImpl extends HibernateTempDao<Staff> implements StaffDao {
             if (null != bean.getId()) {
                 finder.append(" and o.id=:id");
                 finder.setParameter("id", bean.getId());
+            }
+            if (!StringUtils.isNullOrEmpty(bean.getName())) {
+                finder.append(" and o.name like :name");
+                finder.setParameter("name", "%" + bean.getName() + "%");
+            }
+            if (null != bean.getTeamId()) {
+                finder.append(" and o.teamId=:teamId");
+                finder.setParameter("teamId", bean.getTeamId());
             }
         }
     }

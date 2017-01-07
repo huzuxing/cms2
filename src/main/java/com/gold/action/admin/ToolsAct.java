@@ -69,8 +69,8 @@ public class ToolsAct {
         }
         if (null != status) {
             model.addAttribute("status", status);
-            List<Staff> list = staffService.getStaffList(null, null, null, null).getList();
-            model.addAttribute("staff", list);
+            List<Staff> staffs = staffService.getStaffs();
+            model.addAttribute("staff", staffs);
         }
         return "admin/tools/detail";
     }
@@ -124,9 +124,9 @@ public class ToolsAct {
         if (null != status) {
             model.addAttribute("status", status);
             // 当status==1,说明是借出，则查询在库的工器具，归还相反。
-            List<Tools> list = toolsService.getToolsList(null, status == 1 ? 0 : 1, null, null, null).getList();
+            List<Tools> list = toolsService.getTools(status == 1 ? 0 : 1);
             model.addAttribute("tools", list);
-            List<Staff> staffs = staffService.getStaffList(null, null, null, null).getList();
+            List<Staff> staffs = staffService.getStaffs();
             model.addAttribute("staff", staffs);
         }
         return "admin/tools/batch";
@@ -177,6 +177,45 @@ public class ToolsAct {
                     e.printStackTrace();
                     obj.addProperty("status", 0);
                     obj.addProperty("msg", e.getMessage());
+                }
+            }
+        }
+        ResponseUtils.sendResponseJson(response, obj);
+    }
+    @RequestMapping(value = "/tools/log/copy", method = RequestMethod.POST)
+    public void copy(Integer id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+        JsonObject obj = new JsonObject();
+        if (null == id) {
+            obj.addProperty("status", 0);
+            obj.addProperty("msg", "id not exist ...");
+        }
+        else {
+            ToolsLog bean = toolsService.getToolsLogById(id);
+            if (null == bean) {
+                obj.addProperty("status", 0);
+                obj.addProperty("msg", "bean not exist ...");
+            }
+            else {
+                Tools tools = toolsService.getToolsById(bean.getToolsId());
+                if (tools.getStatus() == bean.getStatus()) {// 两个状态相同，说明不能做此操作
+                    obj.addProperty("status", 0);
+                    obj.addProperty("msg", "该工具已" + (tools.getStatus() == 0 ? "在库" : "借出"));
+                }
+                else {
+                    try {
+                        tools.setStatus(bean.getStatus());//做复制操作，同时修改tools状态
+                        tools.setTime(new Date());
+                        tools.setPhone(bean.getPhone());
+                        tools.setReason(bean.getReason());
+                        tools.setOperator(bean.getOperator());
+                        tools.setAuditor(bean.getAuditor());
+                        toolsService.updateToolsAndAddToolsLog(tools, bean.getStatus());
+                        obj.addProperty("status", 200);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        obj.addProperty("status", 0);
+                        obj.addProperty("msg", e.getMessage());
+                    }
                 }
             }
         }

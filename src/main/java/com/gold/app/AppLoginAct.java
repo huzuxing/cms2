@@ -4,6 +4,8 @@ import com.gold.entity.AdminUser;
 import com.gold.entity.AppToken;
 import com.gold.service.TokenService;
 import com.gold.service.UserService;
+import com.gold.util.Constant;
+import com.gold.util.EncryptUtils;
 import com.gold.util.ResponseUtils;
 import com.gold.util.StringUtils;
 import com.google.gson.JsonObject;
@@ -36,7 +38,7 @@ public class AppLoginAct {
             userObj.addProperty("token", token.getToken());
             obj.add("data", userObj);
         }
-        else if (null == token && null != bean && password.equals(bean.getPassword())) {
+        else if (null == token && null != bean && EncryptUtils.originDigest(Constant.PREFIX + password).equals(bean.getPassword())) {
             obj.addProperty("code", 200);
             obj.addProperty("message", "success");
             JsonObject userObj = new JsonObject();

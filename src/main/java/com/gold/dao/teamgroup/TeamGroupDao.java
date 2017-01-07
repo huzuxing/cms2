@@ -15,4 +15,5 @@ public interface TeamGroupDao {
     public TeamGroup getById(Integer id);
     public List<TeamGroup> getTeamGroupList(TeamGroup bean, Integer pageNo, Integer pageSize);
     public Integer getTotalCount(TeamGroup bean);
+
 }

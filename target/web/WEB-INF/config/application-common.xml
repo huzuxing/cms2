@@ -62,6 +62,7 @@
                 <value>com.gold.entity.ToolsLog</value>
                 <value>com.gold.entity.AppToken</value>
                 <value>com.gold.entity.TeamGroup</value>
+                <value>com.gold.entity.Banner</value>
             </list>
         </property>
         <property name="hibernateProperties">

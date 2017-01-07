@@ -25,6 +25,12 @@ public class ToolsService {
         toolsDao.save(bean);
     }
 
+    public List<Tools> getTools(Integer status) {
+        Tools bean = new Tools();
+        bean.setStatus(status);
+        return toolsDao.getToolsList(bean, null, null);
+    }
+
     public Pager<Tools> getToolsList(String name,Integer status, Integer id, Integer pageNo, Integer pageSize) {
         Tools bean = new Tools();
         bean.setName(name);
@@ -61,6 +67,10 @@ public class ToolsService {
         logBean.setOperator(bean.getOperator());
         logBean.setAuditor(bean.getAuditor());
         logBean.setPhone(bean.getPhone());
+        toolsDao.updateToolsAndAddToolsLog(bean, logBean);
+    }
+
+    public void updateToolsAndAddToolsLog(Tools bean, ToolsLog logBean) {
         toolsDao.updateToolsAndAddToolsLog(bean, logBean);
     }
 

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by huzuxing on 2016/10/8.
@@ -24,13 +25,17 @@ public class StaffService {
         staffDao.save(bean);
     }
 
+    public List<Staff> getStaffs(){
+       return staffDao.getStaffList(null, null, null);
+    }
+
     public Pager<Staff> getStaffList(String name, Integer id, Integer pageNo, Integer pageSize) {
         Staff bean = new Staff();
         bean.setName(name);
         bean.setId(id);
         Pager pager = new Pager(QueryUtils.pageNoCheck(pageNo), QueryUtils.pageSizeCheck(pageSize));
         pager.setTotalCount(staffDao.getTotalCount(bean));
-        pager.setList(staffDao.getStaffList(bean, null, null));
+        pager.setList(staffDao.getStaffList(bean, QueryUtils.pageNoCheck(pageNo), QueryUtils.pageSizeCheck(pageSize)));
         return pager;
     }
 
@@ -47,5 +52,11 @@ public class StaffService {
 
     public void update(Staff bean) {
         staffDao.update(bean);
+    }
+
+    public List<Staff> getStaffsByTeamGroupId(Integer teamGroupId) {
+        Staff bean = new Staff();
+        bean.setTeamId(teamGroupId);
+        return staffDao.getStaffList(bean, null, null);
     }
 }

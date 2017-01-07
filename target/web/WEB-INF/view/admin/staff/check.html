@@ -8,21 +8,22 @@ Purchase: http://wrapbootstrap.com
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- Head -->
 <head>
-    <meta charset="utf-8" />
-    <title>后台管理系统-资讯管理</title>
-    <meta name="description" content="data tables" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8"/>
+    <title>后台管理系统-人员管理</title>
+    <meta name="description" content="data tables"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <!--Basic Styles-->
-    <link href="${base}/css/bootstrap.min.css" rel="stylesheet" />
-    <link id="bootstrap-rtl-link" href="" rel="stylesheet" />
-    <link href="${base}/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="${base}/css/bootstrap.min.css" rel="stylesheet"/>
+    <link id="bootstrap-rtl-link" href="" rel="stylesheet"/>
+    <link href="${base}/css/font-awesome.min.css" rel="stylesheet"/>
 
     <!--Beyond styles-->
-    <link id="beyond-link" href="${base}/css/beyond.min.css" rel="stylesheet" />
-    <link href="${base}/css/demo.min.css" rel="stylesheet" />
-    <link href="${base}/css/animate.min.css" rel="stylesheet" />
-    <link id="skin-link" href="" rel="stylesheet" type="text/css" />
+    <link id="beyond-link" href="${base}/css/beyond.min.css" rel="stylesheet"/>
+    <link href="${base}/css/demo.min.css" rel="stylesheet"/>
+    <link href="${base}/css/animate.min.css" rel="stylesheet"/>
+    <link id="skin-link" href="" rel="stylesheet" type="text/css"/>
+    <link href="${base}/css/bootstrap-select.min.css" rel="stylesheet"/>
 
     <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
     <style type="text/css">
@@ -34,98 +35,102 @@ Purchase: http://wrapbootstrap.com
             min-height: 100%;
             padding: 0;
         }
-        input[type=checkbox] {
-            opacity: 1;
-            position: relative;
-            left: 0px;
-            z-index: 12;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <!-- /Head -->
 <!-- Body -->
 <body>
-    <!-- Main Container -->
-    <div class="main-container container-fluid">
-        <!-- Page Container -->
-        <div class="page-container">
-                <!-- Page Body -->
-                <div class="page-body">
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-xs-12">
-                            <div class="widget">
-                                <div class="widget-header bordered-bottom bordered-palegreen">
-                                    <span class="widget-caption">查看资讯</span>
-                                </div>
-                                <div class="widget-body">
-                                    <div>
-                                        <form class="form-horizontal form-bordered" role="form" method="post" action="save" id="jvForm">
-                                            <div class="form-group">
-                                                <label for="title" class="col-sm-2 control-label no-padding-right">标题</label>
-                                                <div class="col-sm-10">
-                                                    <input type="text" readonly class="form-control" name="title" id="title" placeholder="title" value="${bean.title?if_exists}">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="description" class="col-sm-2 control-label no-padding-right">描述</label>
-                                                <div class="col-sm-10">
-                                                    <textarea cols="100" rows="10" readonly name="description" id="description">${bean.description?if_exists}</textarea>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="imgurl" class="col-sm-2 control-label no-padding-right">缩略图</label>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="imgUrl" placeholder="点击上传缩略图" readonly value="${bean.imgUrl?if_exists}">
-                                                    <input type="hidden" name="imgUrl" value="${bean.imgUrl?if_exists}">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="imgurl" class="col-sm-2 control-label no-padding-right"></label>
-                                                <div class="col-sm-10" id="preview">
-                                                    <#if (bean.imgUrl)>
-                                                        <img src='${base + bean.imgUrl}' width=200 height=200/>
-                                                    </#if>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="isPublish" class="col-sm-2 control-label no-padding-right">是否发布</label>
-                                                <div class="col-sm-10">
-                                                    <input type="checkbox" class="choose" id="isPublish" name="isPublish" disabled checked="${bean.isPublish?string('checked', '')}"/>是
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-offset-2 col-sm-10">
-                                                    <button type="button" class="btn btn-info return">返回列表</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <form action="${base}/fileupload" method="post" enctype="multipart/form-data" style="display: none;" id="fileForm">
-                                            <input type="file" name="fileUpload" id="fileUpload" onchange="preview(this)"/>
-                                            <input type="hidden" value="news" name="dir"/>
-                                        </form>
+<!-- Main Container -->
+<div class="main-container container-fluid">
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- Page Body -->
+        <div class="page-body">
+            <div class="row">
+                <div class="col-lg-6 col-sm-6 col-xs-12">
+                    <div class="widget">
+                        <div class="widget-header bordered-bottom bordered-palegreen">
+                            <span class="widget-caption">编辑人员</span>
+                        </div>
+                        <div class="widget-body">
+                            <div>
+                                <form class="form-horizontal form-bordered" role="form" method="post" action="save"
+                                      id="jvForm">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right">姓名</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" readonly
+                                                   value="${bean.name?if_exists}">
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="form-group">
+                                        <label
+                                               class="col-sm-2 control-label no-padding-right">介绍</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control" cols="100" rows="10" readonly>${bean.introduction?if_exists}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right">电话</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" readonly
+                                                   placeholder="" value="${bean.phone?if_exists}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right">职位</label>
+                                        <div class="col-sm-10">
+                                            <select name="job" class="selectpicker" data-live-search="true">
+                                                <#list ['班组长', '班组工程师', '班组安全员', '班组成员'] as job>
+                                                    <#if job_index == bean.job>
+                                                        <option value="${job_index}" >${job}</option>
+                                                        <#break/>
+                                                    </#if>
+                                                </#list>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right">所属班组</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" readonly
+                                                   placeholder="" value="${teamgroup?if_exists}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right">图片</label>
+                                        <div class="col-sm-10" id="preview">
+                                            <#if (bean.img)>
+                                                <img src='${base + bean.img}' width=200 height=200/>
+                                            </#if>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <button type="button" class="btn btn-info return">返回列表</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- /Page Body -->
             </div>
-            <!-- /Page Content -->
         </div>
-        <!-- /Page Container -->
-        <!-- Main Container -->
+        <!-- /Page Body -->
     </div>
+    <!-- /Page Content -->
+</div>
+<!-- /Page Container -->
+<!-- Main Container -->
+</div>
 </body>
 <!--  /Body -->
 <script type="application/javascript" src="${base}/js/jquery-2.0.3.min.js"></script>
 <script type="application/javascript">
     $(function () {
         $(".return").click(function () {
-            location.href = "${base}/admin/news";
+            location.href = "${base}/admin/staff";
         });
     });
 </script>
