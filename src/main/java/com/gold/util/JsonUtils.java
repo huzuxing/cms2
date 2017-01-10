@@ -54,17 +54,28 @@ public class JsonUtils {
         });
         return array;
     }
+
+    public static JsonObject staffToJsonObject(Staff bean) {
+        if (null == bean) {
+            return null;
+        }
+        JsonObject obj = new JsonObject();
+        obj.addProperty("id", bean.getId());
+        obj.addProperty("name", bean.getName());
+        obj.addProperty("phone", bean.getPhone());
+        obj.addProperty("introduction", bean.getIntroduction());
+        obj.addProperty("job", bean.getJob());
+        obj.addProperty("img", bean.getImg());
+        return obj;
+    }
+
     public static JsonArray staffListsToJsonArray(List<Staff> lists) {
         JsonArray array = new JsonArray();
         if (null == lists || lists.size() == 0) {
             return array;
         }
         lists.forEach(bean -> {
-            JsonObject obj = new JsonObject();
-            obj.addProperty("id", bean.getId());
-            obj.addProperty("name", bean.getName());
-            obj.addProperty("phone", bean.getPhone());
-            array.add(obj);
+            array.add(staffToJsonObject(bean));
         });
         return array;
     }
@@ -255,5 +266,34 @@ public class JsonUtils {
         });
         return array;
     }
+
+    public static JsonArray teamgroupListToJsonArray(List<TeamGroup> lists) {
+        JsonArray array = new JsonArray();
+        if (null == lists || lists.size() == 0) {
+            return array;
+        }
+        lists.forEach(bean -> {
+            JsonObject obj = new JsonObject();
+            obj.addProperty("id", bean.getId());
+            obj.addProperty("introduction", bean.getIntroduction());
+            obj.addProperty("ideal", bean.getIdeal());
+            obj.addProperty("catchword", bean.getCatchWord());
+            array.add(obj);
+        });
+        return array;
+    }
+
+    public static JsonObject teamgroupListToJsonObject(TeamGroup bean) {
+        JsonObject obj = new JsonObject();
+        if (null == bean) {
+            return null;
+        }
+        obj.addProperty("id", bean.getId());
+        obj.addProperty("introduction", bean.getIntroduction());
+        obj.addProperty("ideal", bean.getIdeal());
+        obj.addProperty("catchword", bean.getCatchWord());
+        return obj;
+    }
+
 
 }

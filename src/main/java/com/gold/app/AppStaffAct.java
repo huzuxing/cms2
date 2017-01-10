@@ -1,6 +1,7 @@
 package com.gold.app;
 
 import com.gold.entity.SceneWork;
+import com.gold.entity.Staff;
 import com.gold.service.SceneWorkService;
 import com.gold.service.StaffService;
 import com.gold.util.JsonUtils;
@@ -34,11 +35,92 @@ public class AppStaffAct {
         try {
             obj.addProperty("code", 200);
             obj.addProperty("message", "success");
-            obj.add("data", JsonUtils.staffListsToJsonArray(staffService.getStaffList(name, null, null, null).getList()));
+            obj.add("data", JsonUtils.staffListsToJsonArray(staffService.getStaffList(name, id, pageNo, pageSize).getList()));
         } catch (Exception e) {
             e.printStackTrace();
             obj.addProperty("code", 0);
             obj.addProperty("message", "failure");
+        }
+        ResponseUtils.sendResponseJson(response, obj);
+    }
+    @RequestMapping(value = "/app/staffs", method = RequestMethod.POST)
+    public void staffs(HttpServletResponse response) {
+        JsonObject obj = new JsonObject();
+        try {
+            obj.addProperty("code", 200);
+            obj.addProperty("message", "success");
+            obj.add("data", JsonUtils.staffListsToJsonArray(staffService.getStaffs()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            obj.addProperty("code", 0);
+            obj.addProperty("message", "failure");
+        }
+        ResponseUtils.sendResponseJson(response, obj);
+    }
+    @RequestMapping(value = "/app/staff/update", method = RequestMethod.POST)
+    public void update(Integer id, Staff bean, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+        JsonObject obj = new JsonObject();
+        try {
+            if (null != id) {
+                Staff entity = staffService.getStaffById(id);
+                if (null != entity && null != bean) {
+                    if (null != bean.getTeamId()) {
+                        entity.setTeamId(bean.getTeamId());
+                    }
+                }
+                staffService.update(entity);
+                obj.addProperty("status", 200);
+            }
+            else {
+                obj.addProperty("status", 0);
+                obj.addProperty("msg", "id not exist ...");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            obj.addProperty("status", 0);
+            obj.addProperty("msg", "failure");
+        }
+        ResponseUtils.sendResponseJson(response, obj);
+    }
+    @RequestMapping(value = "/app/staff/delete", method = RequestMethod.POST)
+    public void delete(Integer id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+        JsonObject obj = new JsonObject();
+        try {
+            staffService.delete(id);
+            obj.addProperty("status", 200);
+        } catch (Exception e) {
+            e.printStackTrace();
+            obj.addProperty("status", 0);
+            obj.addProperty("msg", "failure");
+        }
+        ResponseUtils.sendResponseJson(response, obj);
+    }
+    @RequestMapping(value = "/app/staff/save", method = RequestMethod.POST)
+    public void save(Staff bean, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+        JsonObject obj = new JsonObject();
+        try {
+            if (null != bean.getId() && bean.getId() > 0)
+                staffService.update(bean);
+            else
+                staffService.save(bean);
+            obj.addProperty("status", 200);
+        } catch (Exception e) {
+            e.printStackTrace();
+            obj.addProperty("status", 0);
+            obj.addProperty("msg", "failure");
+        }
+        ResponseUtils.sendResponseJson(response, obj);
+    }
+    @RequestMapping(value = "/app/staff/detail", method = RequestMethod.POST)
+    public void detail(Integer id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+        JsonObject obj = new JsonObject();
+        try {
+            obj.addProperty("status", 200);
+            obj.add("data", JsonUtils.staffToJsonObject(staffService.getStaffById(id)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            obj.addProperty("status", 0);
+            obj.addProperty("msg", "failure");
         }
         ResponseUtils.sendResponseJson(response, obj);
     }
