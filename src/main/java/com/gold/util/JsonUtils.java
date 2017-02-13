@@ -308,6 +308,7 @@ public class JsonUtils {
             obj.addProperty("introduction", bean.getIntroduction());
             obj.addProperty("ideal", bean.getIdeal());
             obj.addProperty("catchword", bean.getCatchWord());
+            obj.addProperty("logo", bean.getLogo());
             array.add(obj);
         });
         return array;
