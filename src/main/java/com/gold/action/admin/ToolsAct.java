@@ -5,7 +5,6 @@ import com.gold.entity.Tools;
 import com.gold.entity.ToolsLog;
 import com.gold.service.StaffService;
 import com.gold.service.ToolsService;
-import com.gold.util.JsonUtils;
 import com.gold.util.ResponseUtils;
 import com.gold.util.StringUtils;
 import com.google.gson.JsonObject;
@@ -20,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +32,7 @@ public class ToolsAct {
 
     @RequestMapping(value = "/tools", method = RequestMethod.GET)
     public String tools(HttpServletRequest request, HttpServletResponse response, ModelMap model,
-                           String name,Integer status, Integer id, Integer pageNo, Integer pageSize) {
+                        String name, Integer status, Integer id, Integer pageNo, Integer pageSize) {
         model.addAttribute("pager", toolsService.getToolsList(name, status, id, pageNo, pageSize));
         model.addAttribute("name", name);
         return "admin/tools/tools";
@@ -43,11 +40,12 @@ public class ToolsAct {
 
     @RequestMapping(value = "/tools/log", method = RequestMethod.GET)
     public String toollog(HttpServletRequest request, HttpServletResponse response, ModelMap model,
-                           String name, Integer id, Integer status, Integer pageNo, Integer pageSize) {
-        model.addAttribute("pager", toolsService.getToolsLogPager(name, status, id, pageNo, pageSize));
+                          String name, Integer cate, Integer id, Integer status, Integer pageNo, Integer pageSize) {
+        model.addAttribute("pager", toolsService.getToolsLogPager(name, null == cate ? -1 : cate, status, id, pageNo, pageSize));
         model.addAttribute("name", name);
         if (null != status)
             model.addAttribute("status", status);
+        model.addAttribute("cate", cate);
         return "admin/tools/tools_log";
     }
 
@@ -91,15 +89,13 @@ public class ToolsAct {
                        Tools bean, Integer status) {
         if (null != status) {
             toolsService.updateToolsAndAddToolsLog(bean, status);
-        }
-        else if (null != bean && null != bean.getId()) {
+        } else if (null != bean && null != bean.getId()) {
             Tools entity = toolsService.getToolsById(bean.getId());
             if (null != entity) {
                 entity.setName(bean.getName());
                 toolsService.update(entity);
             }
-        }
-        else {
+        } else {
             toolsService.save(bean);
         }
         return "redirect:/admin/tools";
@@ -119,6 +115,7 @@ public class ToolsAct {
         }
         ResponseUtils.sendResponseJson(response, obj);
     }
+
     @RequestMapping(value = "/tools/batch", method = RequestMethod.GET)
     public String batch(HttpServletRequest request, HttpServletResponse response, ModelMap model, Integer status) {
         if (null != status) {
@@ -131,18 +128,18 @@ public class ToolsAct {
         }
         return "admin/tools/batch";
     }
+
     @RequestMapping(value = "/tools/batch", method = RequestMethod.POST)
     public void batchsave(ToolsLog bean, String tools, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
         JsonObject obj = new JsonObject();
         if (null == bean || StringUtils.isNullOrEmpty(tools)) {
             obj.addProperty("status", 0);
             obj.addProperty("msg", "bean attrs not defined ...");
-        }
-        else {
+        } else {
             String[] toolsNames = tools.split(",");
             List<Tools> list = new ArrayList<>();
-            for(String name : toolsNames) {
-                Tools  entity = toolsService.getToolsByName(name.trim());
+            for (String name : toolsNames) {
+                Tools entity = toolsService.getToolsByName(name.trim());
                 if (null == entity) {
                     break;
                 }
@@ -151,10 +148,9 @@ public class ToolsAct {
             if (toolsNames.length != list.size()) {
                 obj.addProperty("status", 0);
                 obj.addProperty("msg", "some of the tools not exist ...");
-            }
-            else {
+            } else {
                 List<ToolsLog> toolsLogs = new ArrayList<>(list.size());//  批量处理，保证两个list大小一致
-                for(Tools t : list) {
+                for (Tools t : list) {
                     t.setStatus(bean.getStatus());
                     bean.setToolsName(t.getName());
                     bean.setToolsId(t.getId());
@@ -182,26 +178,24 @@ public class ToolsAct {
         }
         ResponseUtils.sendResponseJson(response, obj);
     }
+
     @RequestMapping(value = "/tools/log/copy", method = RequestMethod.POST)
     public void copy(Integer id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
         JsonObject obj = new JsonObject();
         if (null == id) {
             obj.addProperty("status", 0);
             obj.addProperty("msg", "id not exist ...");
-        }
-        else {
+        } else {
             ToolsLog bean = toolsService.getToolsLogById(id);
             if (null == bean) {
                 obj.addProperty("status", 0);
                 obj.addProperty("msg", "bean not exist ...");
-            }
-            else {
+            } else {
                 Tools tools = toolsService.getToolsById(bean.getToolsId());
                 if (tools.getStatus() == bean.getStatus()) {// 两个状态相同，说明不能做此操作
                     obj.addProperty("status", 0);
                     obj.addProperty("msg", "该工具已" + (tools.getStatus() == 0 ? "在库" : "借出"));
-                }
-                else {
+                } else {
                     try {
                         tools.setStatus(bean.getStatus());//做复制操作，同时修改tools状态
                         tools.setTime(new Date());
@@ -221,6 +215,7 @@ public class ToolsAct {
         }
         ResponseUtils.sendResponseJson(response, obj);
     }
+
     @Autowired
     private ToolsService toolsService;
     @Autowired

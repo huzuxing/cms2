@@ -4,6 +4,7 @@ import com.gold.entity.SceneWork;
 import com.gold.entity.Staff;
 import com.gold.service.SceneWorkService;
 import com.gold.service.StaffService;
+import com.gold.service.TeamGroupService;
 import com.gold.util.JsonUtils;
 import com.gold.util.ResponseUtils;
 import com.google.gson.JsonObject;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +37,13 @@ public class AppStaffAct {
         try {
             obj.addProperty("code", 200);
             obj.addProperty("message", "success");
-            obj.add("data", JsonUtils.staffListsToJsonArray(staffService.getStaffList(name, id, pageNo, pageSize).getList()));
+
+            List<Staff> staffs = staffService.getStaffList(name, id, pageNo, pageSize).getList();
+            List<String> teamGroups = new ArrayList<>(staffs.size());
+            for (Staff bean : staffs) {
+                teamGroups.add(null != teamGroupService.getTeamGroupById(bean.getTeamId()) ? teamGroupService.getTeamGroupById(bean.getTeamId()).getName() : "");
+            }
+            obj.add("data", JsonUtils.staffListsToJsonArray(staffService.getStaffList(name, id, pageNo, pageSize).getList(), teamGroups));
         } catch (Exception e) {
             e.printStackTrace();
             obj.addProperty("code", 0);
@@ -126,4 +134,6 @@ public class AppStaffAct {
     }
     @Autowired
     private StaffService staffService;
+    @Autowired
+    private TeamGroupService teamGroupService;
 }

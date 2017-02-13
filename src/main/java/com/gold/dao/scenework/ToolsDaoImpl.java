@@ -215,6 +215,10 @@ public class ToolsDaoImpl extends HibernateTempDao<Tools> implements ToolsDao {
                 finder.append(" and o.status=:status");
                 finder.setParameter("status", bean.getStatus());
             }
+            if (!StringUtils.isNullOrEmpty(bean.getOperator())) {
+                finder.append(" and o.operator like :operator");
+                finder.setParameter("operator", "%"+ bean.getOperator() +"%");
+            }
         }
     }
 

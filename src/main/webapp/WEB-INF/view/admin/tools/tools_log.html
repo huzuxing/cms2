@@ -37,6 +37,9 @@ Purchase: http://wrapbootstrap.com
             min-height: 100%;
             padding: 0;
         }
+        input{
+            height: 34px;
+        }
     </style>
 </head>
 <!-- /Head -->
@@ -61,8 +64,14 @@ Purchase: http://wrapbootstrap.com
                             <div class="widget-body">
                                 <div id="expandabledatatable_filter" class="dataTables_filter">
                                     <form id="jvForm" method="get" action="log">
+                                        <div style="float: left;position: relative;padding-right: 15px;">
+                                            <select id="cate" name="cate">
+                                                <option value="-1" selected>按工器具名称</option>
+                                                <option value="0">按人员姓名</option>
+                                            </select>
+                                        </div>
                                         <label>
-                                            <input type="search" name="name" class="form-control input-sm"
+                                            <input type="search" name="name" class="form-control input-md"
                                                    aria-controls="expandabledatatable" value="${name!}">
                                             <input name="status" type="hidden" value="${status!}">
                                         </label>
@@ -141,23 +150,23 @@ Purchase: http://wrapbootstrap.com
                                              id="editabledatatable_paginate">
                                             <ul class="pagination">
                                                 <li class="prev">
-                                                    <a href="log?pageNo=1&name=${name!}">首页</a>
+                                                    <a href="log?pageNo=1&name=${name!}&cate=${cate!}">首页</a>
                                                 </li>
                                                 <li class="prev">
-                                                    <a href="log?pageNo=${pager.prePage}&name=${name!}">上一页</a>
+                                                    <a href="log?pageNo=${pager.prePage}&name=${name!}&cate=${cate!}">上一页</a>
                                                 </li>
                                                 <#if pager.totalPage gt 0>
                                                     <#list 1..pager.totalPage as page>
                                                         <li class="${(pager.pageNo == page) ? string('active', '')}">
-                                                            <a href="log?pageNo=${page}&name=${name!}">${page}</a>
+                                                            <a href="log?pageNo=${page}&name=${name!}&cate=${cate!}">${page}</a>
                                                         </li>
                                                     </#list>
                                                 </#if>
                                                 <li class="next">
-                                                    <a href="log?pageNo=${pager.nextPage}&name=${name!}">下一页</a>
+                                                    <a href="log?pageNo=${pager.nextPage}&name=${name!}&cate=${cate!}">下一页</a>
                                                 </li>
                                                 <li class="prev">
-                                                    <a href="log?pageNo=${pager.totalPage}&name=${name!}">尾页</a>
+                                                    <a href="log?pageNo=${pager.totalPage}&name=${name!}&cate=${cate!}">尾页</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -183,6 +192,9 @@ Purchase: http://wrapbootstrap.com
 <script type="application/javascript">
     $(function () {
         var status = `${status}`;
+        var cate = `${cate}`;
+        cate = cate ? cate : -1;
+        $('#cate').val(cate).trigger('change');
         $("#status").children().each(function () {
             if (status == $(this).val()) {
                 $(this).attr('selected', 'selected');

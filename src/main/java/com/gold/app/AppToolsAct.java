@@ -50,10 +50,10 @@ public class AppToolsAct {
 
     @RequestMapping(value = "/app/tools/log", method = RequestMethod.POST)
     public void toollog(HttpServletRequest request, HttpServletResponse response, ModelMap model,
-                           String name, Integer id, Integer status, Integer pageNo, Integer pageSize) {
+                           String name, Integer cate, Integer id, Integer status, Integer pageNo, Integer pageSize) {
         JsonObject obj = new JsonObject();
         try {
-            List<ToolsLog> lists = toolsService.getToolsLogPager(name, status, id, pageNo, pageSize).getList();
+            List<ToolsLog> lists = toolsService.getToolsLogPager(name, cate, status, id, pageNo, pageSize).getList();
             obj.addProperty("code", 200);
             obj.addProperty("message", "success");
             obj.add("data", JsonUtils.toolsLogListsToJsonArray(lists));

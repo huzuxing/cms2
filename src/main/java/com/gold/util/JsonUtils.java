@@ -66,6 +66,23 @@ public class JsonUtils {
         obj.addProperty("introduction", bean.getIntroduction());
         obj.addProperty("job", bean.getJob());
         obj.addProperty("img", bean.getImg());
+        obj.addProperty("gender", bean.getGender());
+        return obj;
+    }
+
+    public static JsonObject staffToJsonObject(Staff bean, String teamGroupName) {
+        if (null == bean) {
+            return null;
+        }
+        JsonObject obj = new JsonObject();
+        obj.addProperty("id", bean.getId());
+        obj.addProperty("name", bean.getName());
+        obj.addProperty("phone", bean.getPhone());
+        obj.addProperty("introduction", bean.getIntroduction());
+        obj.addProperty("job", bean.getJob());
+        obj.addProperty("img", bean.getImg());
+        obj.addProperty("gender", bean.getGender());
+        obj.addProperty("team", teamGroupName);
         return obj;
     }
 
@@ -77,6 +94,18 @@ public class JsonUtils {
         lists.forEach(bean -> {
             array.add(staffToJsonObject(bean));
         });
+        return array;
+    }
+
+    public static JsonArray staffListsToJsonArray(List<Staff> lists, List<String> teamGroupsName) {
+        JsonArray array = new JsonArray();
+        if (null == lists || lists.size() == 0) {
+            return array;
+        }
+        int length = lists.size();
+        for(int i = 0;i < length; i++) {
+            array.add(staffToJsonObject(lists.get(i), teamGroupsName.get(i)));
+        }
         return array;
     }
 
@@ -275,6 +304,7 @@ public class JsonUtils {
         lists.forEach(bean -> {
             JsonObject obj = new JsonObject();
             obj.addProperty("id", bean.getId());
+            obj.addProperty("name", bean.getName());
             obj.addProperty("introduction", bean.getIntroduction());
             obj.addProperty("ideal", bean.getIdeal());
             obj.addProperty("catchword", bean.getCatchWord());
@@ -289,6 +319,7 @@ public class JsonUtils {
             return null;
         }
         obj.addProperty("id", bean.getId());
+        obj.addProperty("name", bean.getName());
         obj.addProperty("introduction", bean.getIntroduction());
         obj.addProperty("ideal", bean.getIdeal());
         obj.addProperty("catchword", bean.getCatchWord());

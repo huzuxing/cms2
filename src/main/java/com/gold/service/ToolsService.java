@@ -74,12 +74,15 @@ public class ToolsService {
         toolsDao.updateToolsAndAddToolsLog(bean, logBean);
     }
 
-    public Pager<ToolsLog> getToolsLogPager(String name, Integer status, Integer id, Integer pageNo, Integer pageSize) {
+    public Pager<ToolsLog> getToolsLogPager(String name, Integer cate, Integer status, Integer id, Integer pageNo, Integer pageSize) {
         ToolsLog bean = new ToolsLog();
-        bean.setToolsName(name);
         bean.setId(id);
         if (null != status)
             bean.setStatus(status);
+        if (null != cate && -1 != cate)
+            bean.setOperator(name);
+        else
+            bean.setToolsName(name);
         Pager pager = new Pager(QueryUtils.pageNoCheck(pageNo), QueryUtils.pageSizeCheck(pageSize));
         pager.setTotalCount(toolsDao.getToolsLogTotalCount(bean));
         pager.setList(toolsDao.getToolsLogList(bean, QueryUtils.pageNoCheck(pageNo), QueryUtils.pageSizeCheck(pageSize)));
