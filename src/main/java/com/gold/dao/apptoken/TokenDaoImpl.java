@@ -17,19 +17,18 @@ public class TokenDaoImpl extends HibernateTempDao<AppToken> implements TokenDao
     }
 
     @Override
-    public AppToken getToken() {
-        Session session = null;
-        try {
-            session = getSession();
-            Finder finder = new Finder("select o from AppToken o", session);
-            AppToken token = (AppToken) finder.uniqueResult();
-            return token;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (null != session && session.isOpen())
-                session.close();
-        }
-        return null;
+    public AppToken getToken(Integer userId) {
+        Finder finder = new Finder("select o from AppToken o where userId=:userId");
+        finder.setParameter("userId", userId);
+        AppToken token = (AppToken) queryObject(finder);
+        return token;
+    }
+
+    @Override
+    public AppToken getToken(String token) {
+        Finder finder = new Finder("select o from AppToken o where token=:token");
+        finder.setParameter("token", token);
+        AppToken entity = (AppToken) queryObject(finder);
+        return entity;
     }
 }

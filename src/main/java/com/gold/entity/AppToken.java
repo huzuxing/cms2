@@ -23,6 +23,9 @@ public class AppToken implements java.io.Serializable {
     @Column(name = "create_time")
     private Date createTime;
 
+    @Column(name = "user_id")
+    private Integer userId;
+
     public Integer getId() {
         return id;
     }
@@ -53,5 +56,13 @@ public class AppToken implements java.io.Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

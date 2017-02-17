@@ -11,5 +11,7 @@ public interface TokenDao {
 
     public void delete(AppToken bean);
 
-    public AppToken getToken();
+    public AppToken getToken(Integer userId);
+
+    public AppToken getToken(String token);
 }

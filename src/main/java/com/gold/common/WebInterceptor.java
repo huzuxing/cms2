@@ -32,9 +32,14 @@ public class WebInterceptor implements HandlerInterceptor {
                 return true;
             }
             else {
-                AppToken entity = tokenService.getToken();
                 String token = request.getHeader("token");
-                if (null == token || StringUtils.isNullOrEmpty(token) || null == entity || (null != entity && null != token && !token.equals(entity.getToken()))) {
+                boolean unlogin = true;
+                if(!StringUtils.isNullOrEmpty(token)) {
+                    AppToken entity = tokenService.getToken(token);
+                    if (null != entity)
+                        unlogin = false;
+                }
+                if (unlogin) {
                     JsonObject obj = new JsonObject();
                     obj.addProperty("code", 0);
                     obj.addProperty("message", "unlogin");

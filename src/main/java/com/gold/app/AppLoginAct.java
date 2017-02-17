@@ -27,25 +27,29 @@ public class AppLoginAct {
     @RequestMapping(value = "/app/login", method = RequestMethod.POST)
     public void app_login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
         JsonObject obj = new JsonObject();
-        AppToken token = tokenService.getToken();
         AdminUser bean = userService.getAdminUser(username);
-        if (null != token) {
-            obj.addProperty("code", 200);
-            obj.addProperty("message", "success");
-            JsonObject userObj = new JsonObject();
-            userObj.addProperty("username", bean.getUsername());
-            userObj.addProperty("userid", bean.getId());
-            userObj.addProperty("token", token.getToken());
-            obj.add("data", userObj);
-        }
-        else if (null == token && null != bean && EncryptUtils.originDigest(Constant.PREFIX + password).equals(bean.getPassword())) {
-            obj.addProperty("code", 200);
-            obj.addProperty("message", "success");
-            JsonObject userObj = new JsonObject();
-            userObj.addProperty("username", bean.getUsername());
-            userObj.addProperty("userid", bean.getId());
-            userObj.addProperty("token", tokenService.generateToken());
-            obj.add("data", userObj);
+        if (null != bean) {
+            AppToken token = tokenService.getToken(bean.getId());
+            if (null != token) {
+                obj.addProperty("code", 200);
+                obj.addProperty("message", "success");
+                JsonObject userObj = new JsonObject();
+                userObj.addProperty("username", bean.getUsername());
+                userObj.addProperty("userid", bean.getId());
+                userObj.addProperty("token", token.getToken());
+                obj.add("data", userObj);
+            }
+            else {
+                if (EncryptUtils.originDigest(Constant.PREFIX + password).equals(bean.getPassword())) {
+                    obj.addProperty("code", 200);
+                    obj.addProperty("message", "success");
+                    JsonObject userObj = new JsonObject();
+                    userObj.addProperty("username", bean.getUsername());
+                    userObj.addProperty("userid", bean.getId());
+                    userObj.addProperty("token", tokenService.generateToken(bean.getId()));
+                    obj.add("data", userObj);
+                }
+            }
         }
         else {
             obj.addProperty("code", 0);
@@ -59,9 +63,9 @@ public class AppLoginAct {
         String token = request.getHeader("token");
         JsonObject obj = new JsonObject();
         if (!StringUtils.isNullOrEmpty(token)) {
-            AppToken entity = tokenService.getToken();
+            AppToken entity = tokenService.getToken(token);
             if (null != entity) {
-                tokenService.delete();
+                tokenService.delete(entity.getToken());
                 obj.addProperty("code", 200);
                 obj.addProperty("message", "success");
             }
